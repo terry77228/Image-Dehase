@@ -1,5 +1,3 @@
-#include "stdafx.h"
-#include "Form1.h"
 #include <iostream>
 #include <cstdio>
 #include <cv.h>
