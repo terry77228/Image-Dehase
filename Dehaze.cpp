@@ -10,6 +10,26 @@ using namespace std;
 #define t0 0.1
 #define w 0.95
 
+
+
+
+bool Dehazer::LoadImage(const std::string& _filename){
+
+}
+
+bool Dehazer::Dehaze(const int& _patchsize, const double& _t, const double& _w){
+
+}
+
+bool Dehazer::WriteImage(const std::string& _filename){
+
+}
+
+
+
+
+
+
 char filename[100]; 
 CvSize size;
 IplImage *InputImg;

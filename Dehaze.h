@@ -10,7 +10,7 @@ public:
 	bool WriteImage(const std::string& _filename);
 
 private:
-	vector<int> m_Image[3];
+	vector<vector<int>> m_Image[3]; //store image pixels
 };
 
 
