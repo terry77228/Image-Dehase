@@ -1,4 +1,6 @@
 #include "Dehaze.h"
+#include <queue>
+#include <functional>
 using namespace std;
 
 
@@ -76,22 +78,34 @@ double ImageDehazer::Atmospheric_Light_Estimate()
 {
 
 
+	std::priority_queue<uchar, vector<uchar>, std::greater<uchar>> TopValues;
 
-	double Max = 0;
-
-	//find out the highest pixels in the dark channel
-	Max = 0;
+	//find out the 0.1% highest pixels in the dark channel
+	int TopAmounts = m_DarkChannelImage.rows * m_DarkChannelImage.cols / 1000;
+	double total = 0;
 	for(int i = 0 ; i < m_DarkChannelImage.rows; i++)
 	{
 		for(int j = 0 ;j < m_DarkChannelImage.cols; j++)
 		{
-			Max = std::max(static_cast<double>(m_DarkChannelImage.at<uchar>(i, j)), Max);
-			
+			uchar pixel = m_DarkChannelImage.at<uchar>(i, j);
+			if (TopValues.size() < TopAmounts){
+				TopValues.push(pixel);
+				total += pixel;
+			}
+			else{
+				if (TopValues.top() >= pixel)
+					continue;
+				total -= TopValues.top();
+				total += pixel;
+				TopValues.pop();
+				TopValues.push(pixel);
+			}
 		}
 	}
 
-	cout << Max << endl;
-	return Max;
+	total /= TopAmounts;
+	cout << total << endl;
+	return total;
 }
 
 void ImageDehazer::TransMap_Create(const int& _patchsize, const double& _t, const double& _w)
