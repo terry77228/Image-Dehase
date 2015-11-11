@@ -61,9 +61,7 @@ void ImageDehazer::DarkChannelImage_Create(const int& _patchsize)
 					if (m < 0 || n < 0 || m >= m_Image.rows || n >= m_Image.cols)
 						continue;
 
-					DarkVal = std::min(DarkVal, m_Image.at<Vec3b>(m, n)[0]);
-					DarkVal = std::min(DarkVal, m_Image.at<Vec3b>(m, n)[1]);
-					DarkVal = std::min(DarkVal, m_Image.at<Vec3b>(m, n)[2]);
+					DarkVal = std::min(std::min(m_Image.at<Vec3b>(i, j)[0], m_Image.at<Vec3b>(i, j)[1]), m_Image.at<Vec3b>(i, j)[2]);
 				}
 			}
 			m_DarkChannelImage.at<uchar>(i, j) = DarkVal;
@@ -118,21 +116,7 @@ void ImageDehazer::TransMap_Create(const int& _patchsize, const double& _t, cons
 		for(int j = 0; j < m_Image.cols; j++)
 		{
 			
-			double MIN = 255;
-
-			for (int m = i - _patchsize / 2; m <= i + _patchsize / 2; m++)
-			{
-				for (int n = j - _patchsize / 2; n <= j + _patchsize / 2; n++)
-				{
-					if ((n<0) || (m<0) || (m >= m_Image.rows) || (n >= m_Image.cols))		
-						continue;
-					else
-					{
-						MIN = std::min(std::min(m_Image.at<Vec3b>(i, j)[0], m_Image.at<Vec3b>(i, j)[1]), m_Image.at<Vec3b>(i, j)[2]);
-					}
-				}
-			}
-			double t = std::max( 1 - (_w*MIN/m_AtmosLight), _t);
+			double t = std::max( 1 - (_w*m_DarkChannelImage.at<uchar>(i, j)/m_AtmosLight), _t);
 			
 			m_RecoveredImage.at<Vec3b>(i, j)[0] = static_cast<uchar>(std::min(((m_Image.at<Vec3b>(i, j)[0] - m_AtmosLight) / t + m_AtmosLight), 255.0));
 			m_RecoveredImage.at<Vec3b>(i, j)[1] = static_cast<uchar>(std::min(((m_Image.at<Vec3b>(i, j)[1] - m_AtmosLight) / t + m_AtmosLight), 255.0));
