@@ -51,7 +51,7 @@ void ImageDehazer::DarkChannelImage_Create(const int& _patchsize)
 {
 
 
-	m_DarkChannelImage.create(m_Image.cols, m_Image.rows, CV_8UC1);
+	m_DarkChannelImage.create(m_Image.rows, m_Image.cols, CV_8UC1);
 
 	for (int i = 0; i < m_Image.rows; ++i){
 		for (int j = 0; j < m_Image.cols; ++j){
