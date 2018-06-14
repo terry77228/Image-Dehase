@@ -61,7 +61,7 @@ void ImageDehazer::DarkChannelImage_Create(const int& _patchsize)
 					if (m < 0 || n < 0 || m >= m_Image.rows || n >= m_Image.cols)
 						continue;
 
-					DarkVal = std::min(std::min(m_Image.at<Vec3b>(i, j)[0], m_Image.at<Vec3b>(i, j)[1]), m_Image.at<Vec3b>(i, j)[2]);
+					DarkVal = std::min(std::min(m_Image.at<Vec3b>(m, n)[0], m_Image.at<Vec3b>(m, n)[1]), m_Image.at<Vec3b>(m, n)[2]);
 				}
 			}
 			m_DarkChannelImage.at<uchar>(i, j) = DarkVal;
